@@ -30,6 +30,8 @@ public interface InventorySystem {
 			List<Integer> productoInternoIds);
 
 	List<ProductoInternoDto> getProductos() throws Exception;
+	
+	ProductoInternoDto getProductById(Integer productId) throws Exception;
 
 	List<ProductoInternoDto> updateManyProducto(List<ProductoInternoDto> dtos)
 			throws Exception;

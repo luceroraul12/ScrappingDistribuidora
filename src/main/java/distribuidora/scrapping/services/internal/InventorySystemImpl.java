@@ -240,4 +240,12 @@ public class InventorySystemImpl implements InventorySystem {
 		return productoInternoRepository.findAllById(productIds);
 	}
 
+	@Override
+	public ProductoInternoDto getProductById(Integer productId)
+			throws Exception {
+		Client client = usuarioService.getCurrentClient();
+		return productoInternoConverter.toDto(
+				productoInternoRepository.findByIdAndClientId(productId, client.getId()));
+	}
+
 }
