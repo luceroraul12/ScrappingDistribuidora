@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import distribuidora.scrapping.dto.CategoryHasUnitDto;
 import distribuidora.scrapping.dto.DatosDistribuidoraDto;
+import distribuidora.scrapping.dto.ProductCustomerDto;
 import distribuidora.scrapping.dto.ProductoInternoDto;
 import distribuidora.scrapping.entities.ProductoInterno;
 
@@ -32,6 +33,8 @@ public interface InventorySystem {
 	List<ProductoInternoDto> getProductos() throws Exception;
 	
 	ProductoInternoDto getProductById(Integer productId) throws Exception;
+	
+	ProductCustomerDto getProductToOrderById(Integer productId) throws Exception;
 
 	List<ProductoInternoDto> updateManyProducto(List<ProductoInternoDto> dtos)
 			throws Exception;

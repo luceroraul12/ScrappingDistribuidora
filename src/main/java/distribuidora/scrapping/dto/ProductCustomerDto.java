@@ -10,6 +10,7 @@ public class ProductCustomerDto {
 	private String name;
 	private String description;
 	private Integer price;
+	private Integer priceUnit;
 	private LookupValueDto category;
 	private LookupValueDto unitType;
 }

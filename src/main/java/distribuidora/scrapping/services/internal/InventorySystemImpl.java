@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import distribuidora.scrapping.dto.CategoryHasUnitDto;
 import distribuidora.scrapping.dto.DatosDistribuidoraDto;
+import distribuidora.scrapping.dto.ProductCustomerDto;
 import distribuidora.scrapping.dto.ProductoInternoDto;
 import distribuidora.scrapping.entities.CategoryHasUnit;
 import distribuidora.scrapping.entities.Client;
@@ -58,6 +59,9 @@ public class InventorySystemImpl implements InventorySystem {
 
 	@Autowired
 	private DatosDistribuidoraConverter datosDistribuidorConverter;
+	
+	@Autowired
+	private ProductoInternoStatusService productService;
 
 	@Override
 	public int actualizarPreciosAutomatico() {
@@ -246,6 +250,12 @@ public class InventorySystemImpl implements InventorySystem {
 		Client client = usuarioService.getCurrentClient();
 		return productoInternoConverter.toDto(
 				productoInternoRepository.findByIdAndClientId(productId, client.getId()));
+	}
+
+	@Override
+	public ProductCustomerDto getProductToOrderById(Integer productId)
+			throws Exception {
+		return productService.getProductToOrderById(productId);
 	}
 
 }

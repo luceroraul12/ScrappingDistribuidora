@@ -19,4 +19,6 @@ public interface ProductoInternoStatusService {
 	List<ProductoInternoStatus> getAllByProductIds(List<Integer> productIds);
 
 	void saveAll(List<ProductoInternoStatus> productStatus);
+
+	ProductCustomerDto getProductToOrderById(Integer productId);
 }
