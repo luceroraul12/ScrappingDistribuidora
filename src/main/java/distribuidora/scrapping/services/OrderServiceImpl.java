@@ -11,11 +11,7 @@ import org.springframework.stereotype.Service;
 
 import distribuidora.scrapping.configs.Constantes;
 import distribuidora.scrapping.dto.OrderDto;
-import distribuidora.scrapping.dto.ProductOrderDto;
-import distribuidora.scrapping.entities.CategoryHasUnit;
 import distribuidora.scrapping.entities.Client;
-import distribuidora.scrapping.entities.LookupValor;
-import distribuidora.scrapping.entities.ProductoInterno;
 import distribuidora.scrapping.entities.ProductoInternoStatus;
 import distribuidora.scrapping.entities.customer.Customer;
 import distribuidora.scrapping.entities.customer.Order;
@@ -30,7 +26,6 @@ import distribuidora.scrapping.services.internal.InventorySystem;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
 import distribuidora.scrapping.util.CalculatorUtil;
 import distribuidora.scrapping.util.converters.OrderConverter;
-import distribuidora.scrapping.util.converters.OrderHasProductConverter;
 import distribuidora.scrapping.util.converters.ProductHasStatusToProductOrderConverter;
 
 @Service
@@ -44,8 +39,8 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private InventorySystem inventorySystem;
 
-	@Autowired
-	private OrderHasProductConverter orderHasProductConverter;
+	// @Autowired
+	// private OrderHasProductConverter orderHasProductConverter;
 
 	@Autowired
 	private OrderRepository orderRepository;
@@ -96,9 +91,9 @@ public class OrderServiceImpl implements OrderService {
 		// Me fijo si tiene productos cargados
 		OrderDto dto = orderConverter.toDto(order);
 		// Le agrego las unidades / precio a los productos que faltaban
-		if(CollectionUtils.isNotEmpty(dto.getProducts()))
+		if (CollectionUtils.isNotEmpty(dto.getProducts()))
 			productoInternoStatusService.setDataToClientList(dto.getProducts());
-		
+
 		return dto;
 	}
 
@@ -144,20 +139,12 @@ public class OrderServiceImpl implements OrderService {
 				dto.setUsername(o.getCustomer().getUsername());
 				dto.setStoreCode(o.getClient().getName());
 				dto.setDate(o.getDate());
-//				dto.setProducts(orderHasProductConverter.toDtoList(p));
+				// dto.setProducts(orderHasProductConverter.toDtoList(p));
 				result.add(dto);
 			});
 
 		}
 		return result;
-	}
-
-	@Override
-	public OrderDto confirmOrder(Integer orderId) throws Exception {
-		Order order = validateOrderExistAndActive(orderId);
-		order.setStatus(Constantes.ORDER_STATUS_CONFIRMED);
-		orderRepository.save(order);
-		return orderConverter.toDto(order);
 	}
 
 	@Override
@@ -205,52 +192,8 @@ public class OrderServiceImpl implements OrderService {
 		OrderDto orderDto = orderConverter.toDto(order);
 		List<OrderHasProduct> ohp = orderHasProductRepository
 				.findAllByOrderId(orderId);
-//		orderDto.setProducts(orderHasProductConverter.toDtoList(ohp));
+		// orderDto.setProducts(orderHasProductConverter.toDtoList(ohp));
 		return orderDto;
-	}
-
-	@Override
-	public OrderDto updateOrder(OrderDto dto) throws Exception {
-		// Me fijo que exista el pedido
-		Order order = validateOrderExistAndActive(dto.getId());
-		// Busco los productos asociados anteriores y los elimino
-		List<OrderHasProduct> ohps = orderHasProductRepository
-				.findAllByOrderId(order.getId());
-		orderHasProductRepository.deleteAll(ohps);
-		// Asocio nuevamente los productos que me manda
-//		List<OrderHasProduct> newOhps = configOrderHasProduct(order,
-//				dto.getProducts());
-//		// Persisto los nuevos productos
-//		newOhps = orderHasProductRepository.saveAll(newOhps);
-		// Convierto y retorno el dto
-		OrderDto result = orderConverter.toDto(order);
-//		result.setProducts(orderHasProductConverter.toDtoList(newOhps));
-		return result;
-	}
-
-	private List<OrderHasProduct> configOrderHasProduct(Order order,
-			List<ProductOrderDto> productsDto) throws Exception {
-		// Me fijo los productos de la base
-		List<Integer> productIds = productsDto.stream()
-				.map(p -> p.getProductId()).toList();
-		List<ProductoInterno> products = inventorySystem
-				.getProductByIds(productIds);
-		// Valido que la cantidad de productos enviados sea la misma a l aque
-		// existen en la base de datos
-		if (products.size() != productsDto.size())
-			throw new Exception(
-					"Alguno de los productos no existen en el sistema");
-		List<OrderHasProduct> orderHasProducts = new ArrayList<>();
-		for (ProductOrderDto ohpDto : productsDto) {
-			OrderHasProduct ohp = orderHasProductConverter.toEntidad(ohpDto);
-			ProductoInterno product = ohp.getProduct();
-			ohp.setOrder(order);
-			// Le agrego producto para que no tenga conflictos al momento de
-			// hacer desconversion
-			ohp.setProduct(product);
-			orderHasProducts.add(ohp);
-		}
-		return orderHasProducts;
 	}
 
 	private Order validateOrderExistAndActive(Integer orderId)
@@ -265,54 +208,4 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 
-	@Override
-	public List<OrderDto> getAllOrders() {
-		List<Order> orders = orderRepository.findAll();
-		orders.sort((a, b) -> b.getDate().compareTo(a.getDate()));
-		List<Integer> orderIds = orders.stream().map(o -> o.getId()).toList();
-		List<OrderDto> result = orderConverter.toDtoList(orders);
-		// Busco todos los productos de cada orden
-		List<OrderHasProduct> ohp = orderHasProductRepository
-				.findAllByOrderId(orderIds.toArray(Integer[]::new));
-		// Recorro cada uno de los pedidos y le agrego sus productos
-		for (OrderDto o : result) {
-			// Filtro sus productos
-			List<OrderHasProduct> ohpSelected = ohp.stream()
-					.filter(p -> p.getOrder().getId().equals(o.getId()))
-					.toList();
-			// Convierto y agrego
-//			o.setProducts(orderHasProductConverter.toDtoList(ohpSelected));
-		}
-		return result;
-	}
-
-	@Override
-	public List<ProductOrderDto> getProductOrders() {
-		// Busco los productos
-		List<ProductoInternoStatus> products = productoInternoStatusService
-				.getAllEntities();
-		// Busco los Lookup de las unidades
-		List<CategoryHasUnit> categoryHasUnits = categoryHasUnitRepository
-				.findAll();
-		List<ProductOrderDto> result = new ArrayList<>();
-		// Debo vincular las unidades al producto y colocarle el precio
-		products.forEach(pis -> {
-			// Identifico la categoria del producto
-			LookupValor lvUnit = categoryHasUnits.stream()
-					.filter(chu -> chu.getCategory().getId().equals(
-							pis.getProductoInterno().getLvCategoria().getId()))
-					.findFirst().orElse(null).getUnit();
-			// Comienzo a convertir el dto
-			ProductOrderDto dto = productHasStatusToProductOrderConverter
-					.toDto(pis);
-			// agrego los datos de la unidad de la categoria
-			dto.setUnitName(lvUnit.getDescripcion());
-			dto.setUnitValue(Double.parseDouble(lvUnit.getValor()));
-			int unitPrice = (int) (calculatorUtil.calculateCustomerPrice(
-					pis.getProductoInterno()) * dto.getUnitValue());
-			dto.setUnitPrice(unitPrice);
-			result.add(dto);
-		});
-		return result;
-	}
 }

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import distribuidora.scrapping.dto.ProductCustomerDto;
+import distribuidora.scrapping.dto.ProductDataDto;
 import distribuidora.scrapping.dto.ProductoInternoStatusDto;
 import distribuidora.scrapping.entities.Client;
 import distribuidora.scrapping.entities.LookupValor;
@@ -64,16 +64,16 @@ public class ProductoInternoStatusServiceImp
 	}
 
 	@Override
-	public List<ProductCustomerDto> getProductsForCustomer() {
+	public List<ProductDataDto> getProductsForCustomer() {
 		List<ProductoInternoStatus> entities = repository.findAll();
-		List<ProductCustomerDto> dtos = productCustomerDtoConverter
+		List<ProductDataDto> dtos = productCustomerDtoConverter
 				.toDtoList(entities);
 		// Busco las relaciones de las categorias con las unidades
 		Map<Integer, LookupValor> mapUnitByCategoryId = categoryHasUnitRepository
 				.findAll().stream().collect(Collectors
 						.toMap(r -> r.getCategory().getId(), r -> r.getUnit()));
 		// Recorro cada dto para asignarle su unidad
-		for (ProductCustomerDto d : dtos) {
+		for (ProductDataDto d : dtos) {
 			LookupValor unit = mapUnitByCategoryId
 					.getOrDefault(d.getCategory().getId(), null);
 			if (unit != null)
@@ -121,19 +121,19 @@ public class ProductoInternoStatusServiceImp
 	}
 
 	@Override
-	public ProductCustomerDto getProductToOrderById(Integer productId) {
+	public ProductDataDto getProductToOrderById(Integer productId) {
 		Client client = userService.getCurrentClient();
 
 		ProductoInternoStatus product = repository.findByProductId(productId,
 				client.getId());
-		ProductCustomerDto dto = productCustomerDtoConverter.toDto(product);
+		ProductDataDto dto = productCustomerDtoConverter.toDto(product);
 		setDataToClientList(Arrays.asList(dto));
 		return dto;
 	}
 
 	@Override
 	public void setDataToClientList(
-			List<ProductCustomerDto> dtos) {
+			List<ProductDataDto> dtos) {
 		// Busco las relaciones de las categorias con las unidades
 		Map<Integer, LookupValor> mapUnitByCategoryId = categoryHasUnitRepository
 				.findAll().stream().collect(Collectors

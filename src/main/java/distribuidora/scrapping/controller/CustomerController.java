@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import distribuidora.scrapping.dto.OrderDto;
-import distribuidora.scrapping.dto.ProductCustomerDto;
+import distribuidora.scrapping.dto.ProductDataDto;
 import distribuidora.scrapping.services.OrderService;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
 
@@ -24,7 +24,7 @@ public class CustomerController {
 	OrderService orderService;
 
 	@GetMapping("/products")
-	public List<ProductCustomerDto> getProducts() {
+	public List<ProductDataDto> getProducts() {
 		return service.getProductsForCustomer();
 	}
 

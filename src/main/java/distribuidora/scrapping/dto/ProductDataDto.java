@@ -3,7 +3,7 @@ package distribuidora.scrapping.dto;
 import lombok.Data;
 
 @Data
-public class ProductCustomerDto {
+public class ProductDataDto {
 	private Integer id;
 	private Boolean stock;
 	private Boolean onlyUnit;

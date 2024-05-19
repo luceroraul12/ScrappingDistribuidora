@@ -14,6 +14,6 @@ public class OrderDto {
 	private String storeCode;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date date;
-	private List<ProductCustomerDto> products;
+	private List<ProductOrderDto> products;
 	private String status;
 }

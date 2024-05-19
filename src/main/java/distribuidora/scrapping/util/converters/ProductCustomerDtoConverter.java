@@ -3,13 +3,13 @@ package distribuidora.scrapping.util.converters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import distribuidora.scrapping.dto.ProductCustomerDto;
+import distribuidora.scrapping.dto.ProductDataDto;
 import distribuidora.scrapping.entities.ProductoInterno;
 import distribuidora.scrapping.entities.ProductoInternoStatus;
 import distribuidora.scrapping.util.CalculatorUtil;
 
 @Component
-public class ProductCustomerDtoConverter extends Converter<ProductoInternoStatus, ProductCustomerDto>{
+public class ProductCustomerDtoConverter extends Converter<ProductoInternoStatus, ProductDataDto>{
 	
 	@Autowired
 	CalculatorUtil calculatorUtil;
@@ -18,8 +18,8 @@ public class ProductCustomerDtoConverter extends Converter<ProductoInternoStatus
 	LookupValueDtoConverter lookupValueDtoConverter;
 
 	@Override
-	public ProductCustomerDto toDto(ProductoInternoStatus entidad) {
-		ProductCustomerDto dto = new ProductCustomerDto();
+	public ProductDataDto toDto(ProductoInternoStatus entidad) {
+		ProductDataDto dto = new ProductDataDto();
 		ProductoInterno p = entidad.getProductoInterno();
 		dto.setId(p.getId());
 		dto.setName(p.getNombre());
@@ -32,7 +32,7 @@ public class ProductCustomerDtoConverter extends Converter<ProductoInternoStatus
 	}
 
 	@Override
-	public ProductoInternoStatus toEntidad(ProductCustomerDto dto) {
+	public ProductoInternoStatus toEntidad(ProductDataDto dto) {
 		// TODO Auto-generated method stub
 		return null;
 	}
