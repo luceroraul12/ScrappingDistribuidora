@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,6 +66,9 @@ public class ProductoInterno {
 	@ManyToOne
 	@JoinColumn(name = "client_id", nullable = false)
 	private Client client;
+	
+	@OneToOne(mappedBy = "productoInterno")
+	private ProductoInternoStatus prodInternoStatus;
 
 	@Builder
 	public ProductoInterno(Integer id, String nombre, String descripcion,

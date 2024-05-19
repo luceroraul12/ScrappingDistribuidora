@@ -21,4 +21,6 @@ public interface ProductoInternoStatusService {
 	void saveAll(List<ProductoInternoStatus> productStatus);
 
 	ProductCustomerDto getProductToOrderById(Integer productId);
+	
+	void setDataToClientList(List<ProductCustomerDto> dtos);
 }

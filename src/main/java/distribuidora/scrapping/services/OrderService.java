@@ -4,16 +4,19 @@ import java.util.List;
 
 import distribuidora.scrapping.dto.OrderDto;
 import distribuidora.scrapping.dto.ProductOrderDto;
+import distribuidora.scrapping.entities.Client;
+import distribuidora.scrapping.security.entity.UsuarioEntity;
 
 public interface OrderService {
 
 	/**
-	 * Es para crear ordenes de compras visto desde el cliente final
+	 * Se fija si la tienda actual puede crear una nueva orden.
+	 * Si existia una creada, va a retomarla
 	 * @param order
 	 * @return
 	 * @throws Exception
 	 */
-	OrderDto createOrder(OrderDto order) throws Exception;
+	OrderDto createOrGetActualOrder() throws Exception;
 
 	/**
 	 * Es para obtener el historial de ordenes realizadas en cierta tienda
@@ -24,7 +27,7 @@ public interface OrderService {
 	List<OrderDto> getMyOrders(String storeCode, String username);
 	
 	/**
-	 * Es para que luego de {@link #createOrder(OrderDto)} la tienda pueda validar el pedido en precios, productos y cantidades
+	 * Es para que luego de {@link #createOrGetActualOrder(OrderDto)} la tienda pueda validar el pedido en precios, productos y cantidades
 	 * @param orderId
 	 * @return
 	 * @throws Exception 

@@ -1,5 +1,6 @@
 package distribuidora.scrapping.services.internal;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -122,22 +123,31 @@ public class ProductoInternoStatusServiceImp
 	@Override
 	public ProductCustomerDto getProductToOrderById(Integer productId) {
 		Client client = userService.getCurrentClient();
-		
-		ProductoInternoStatus product = repository.findByProductId(productId, client.getId());
+
+		ProductoInternoStatus product = repository.findByProductId(productId,
+				client.getId());
 		ProductCustomerDto dto = productCustomerDtoConverter.toDto(product);
+		setDataToClientList(Arrays.asList(dto));
+		return dto;
+	}
+
+	@Override
+	public void setDataToClientList(
+			List<ProductCustomerDto> dtos) {
 		// Busco las relaciones de las categorias con las unidades
 		Map<Integer, LookupValor> mapUnitByCategoryId = categoryHasUnitRepository
 				.findAll().stream().collect(Collectors
 						.toMap(r -> r.getCategory().getId(), r -> r.getUnit()));
-		// Recorro cada dto para asignarle su unidad
-		LookupValor unit = mapUnitByCategoryId
-				.getOrDefault(dto.getCategory().getId(), null);
-		if (unit != null) {
-			dto.setUnitType(lookupValueDtoConverter.toDto(unit));
-			Double percent = Double.parseDouble(unit.getValor());
-			double result = dto.getPrice() * percent;
-			dto.setPriceUnit((int)Math.round(result));
-		}
-		return dto;
+		dtos.forEach(dto -> {
+			// Recorro cada dto para asignarle su unidad
+			LookupValor unit = mapUnitByCategoryId
+					.getOrDefault(dto.getCategory().getId(), null);
+			if (unit != null) {
+				dto.setUnitType(lookupValueDtoConverter.toDto(unit));
+				Double percent = Double.parseDouble(unit.getValor());
+				double result = dto.getPrice() * percent;
+				dto.setPriceUnit((int) Math.round(result));
+			}
+		});
 	}
 }

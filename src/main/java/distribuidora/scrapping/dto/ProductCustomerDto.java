@@ -13,4 +13,5 @@ public class ProductCustomerDto {
 	private Integer priceUnit;
 	private LookupValueDto category;
 	private LookupValueDto unitType;
+	private double amount;
 }

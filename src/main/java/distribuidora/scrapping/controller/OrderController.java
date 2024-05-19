@@ -22,19 +22,14 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 	
-	@GetMapping("")
-	List<OrderDto> getOrders(){
-		return orderService.getAllOrders();
-	};
-	
 	@GetMapping("productOrders")
 	List<ProductOrderDto> getProductOrders(){
 		return orderService.getProductOrders();
 	};
 
-	@PostMapping
-	OrderDto createOrder(@RequestBody OrderDto dto) throws Exception {
-		return orderService.createOrder(dto);
+	@GetMapping("")
+	OrderDto createOrGetActualOrder() throws Exception {
+		return orderService.createOrGetActualOrder();
 	}
 
 	@PutMapping

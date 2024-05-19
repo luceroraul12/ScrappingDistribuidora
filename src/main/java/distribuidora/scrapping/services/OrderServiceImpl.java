@@ -1,7 +1,6 @@
 package distribuidora.scrapping.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -76,41 +75,31 @@ public class OrderServiceImpl implements OrderService {
 	private UsuarioService userService;
 
 	@Override
-	public OrderDto createOrder(OrderDto order) throws Exception {
-		Customer customer = validateCustomer(order);
-		// Verifico que codigo de cliente exista
-		Client client = validateClient(order);
-		List<ProductOrderDto> resultOrderProducts = null;
-		Order o = null;
-		OrderDto result = null;
-		// Busco los productos solicitados
-		if (CollectionUtils.isNotEmpty(order.getProducts())) {
-			List<OrderHasProduct> orderHasProducts = configOrderHasProduct(o,
-					order.getProducts());
-			// Creo la orden
-			o = new Order();
-			o.setClient(client);
-			o.setCustomer(customer);
-			o.setDate(new Date());
-			o.setStatus(Constantes.ORDER_STATUS_PENDING);
-			o = orderRepository.save(o);
-			// Seteo la orden a todos los productos
-			for (OrderHasProduct ohp : orderHasProducts) {
-				ohp.setOrder(o);
-			}
-			// Guardo todos los order product
-			orderHasProducts = orderHasProductRepository
-					.saveAll(orderHasProducts);
-			resultOrderProducts = orderHasProductConverter
-					.toDtoList(orderHasProducts);
-		} else {
+	public OrderDto createOrGetActualOrder() throws Exception {
+		// Busco la tienda cliente
+		// Busco el usuario
+		// TODO: En proximas versiones hay que ver si es necesario diferenciar
+		// el pedido en funcion del usuario logeado en la tienda
+		Client client = userService.getCurrentClient();
+		if (client == null)
 			throw new Exception(
-					"No esta permitido crear ordenes sin productos asociados");
-		}
-		result = orderConverter.toDto(o);
-		result.setProducts(resultOrderProducts);
+					"La tienda desde la que pregunta por pedidos no existe");
 
-		return result;
+		Order order = orderRepository
+				.findOrderPendingByClientId(client.getId());
+		// En caso de no existir tengo que crearlo
+		if (order == null) {
+			order = new Order(client);
+			order = orderRepository.save(order);
+		}
+
+		// Me fijo si tiene productos cargados
+		OrderDto dto = orderConverter.toDto(order);
+		// Le agrego las unidades / precio a los productos que faltaban
+		if(CollectionUtils.isNotEmpty(dto.getProducts()))
+			productoInternoStatusService.setDataToClientList(dto.getProducts());
+		
+		return dto;
 	}
 
 	private Client validateClient(OrderDto order) throws Exception {
@@ -155,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
 				dto.setUsername(o.getCustomer().getUsername());
 				dto.setStoreCode(o.getClient().getName());
 				dto.setDate(o.getDate());
-				dto.setProducts(orderHasProductConverter.toDtoList(p));
+//				dto.setProducts(orderHasProductConverter.toDtoList(p));
 				result.add(dto);
 			});
 
@@ -216,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
 		OrderDto orderDto = orderConverter.toDto(order);
 		List<OrderHasProduct> ohp = orderHasProductRepository
 				.findAllByOrderId(orderId);
-		orderDto.setProducts(orderHasProductConverter.toDtoList(ohp));
+//		orderDto.setProducts(orderHasProductConverter.toDtoList(ohp));
 		return orderDto;
 	}
 
@@ -229,13 +218,13 @@ public class OrderServiceImpl implements OrderService {
 				.findAllByOrderId(order.getId());
 		orderHasProductRepository.deleteAll(ohps);
 		// Asocio nuevamente los productos que me manda
-		List<OrderHasProduct> newOhps = configOrderHasProduct(order,
-				dto.getProducts());
-		// Persisto los nuevos productos
-		newOhps = orderHasProductRepository.saveAll(newOhps);
+//		List<OrderHasProduct> newOhps = configOrderHasProduct(order,
+//				dto.getProducts());
+//		// Persisto los nuevos productos
+//		newOhps = orderHasProductRepository.saveAll(newOhps);
 		// Convierto y retorno el dto
 		OrderDto result = orderConverter.toDto(order);
-		result.setProducts(orderHasProductConverter.toDtoList(newOhps));
+//		result.setProducts(orderHasProductConverter.toDtoList(newOhps));
 		return result;
 	}
 
@@ -292,7 +281,7 @@ public class OrderServiceImpl implements OrderService {
 					.filter(p -> p.getOrder().getId().equals(o.getId()))
 					.toList();
 			// Convierto y agrego
-			o.setProducts(orderHasProductConverter.toDtoList(ohpSelected));
+//			o.setProducts(orderHasProductConverter.toDtoList(ohpSelected));
 		}
 		return result;
 	}
