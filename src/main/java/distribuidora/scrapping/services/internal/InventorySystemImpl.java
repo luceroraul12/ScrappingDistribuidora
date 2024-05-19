@@ -20,7 +20,6 @@ import distribuidora.scrapping.repositories.DatosDistribuidoraRepository;
 import distribuidora.scrapping.repositories.postgres.CategoryHasUnitRepository;
 import distribuidora.scrapping.repositories.postgres.ExternalProductRepository;
 import distribuidora.scrapping.repositories.postgres.ProductoInternoRepository;
-import distribuidora.scrapping.services.ExternalProductService;
 import distribuidora.scrapping.services.UsuarioService;
 import distribuidora.scrapping.util.converters.CategoryHasUnitDtoConverter;
 import distribuidora.scrapping.util.converters.DatosDistribuidoraConverter;

@@ -33,7 +33,6 @@ public class VillaresExcelService extends ProductSearcherExcel {
 		String code = String
 				.valueOf(Math.round(row.getCell(1).getNumericCellValue()) + "R-"
 						+ row.getRowNum());
-		String cantidad = "";
 		String title = "";
 		String brand = "";
 		String unit = "";
@@ -43,8 +42,6 @@ public class VillaresExcelService extends ProductSearcherExcel {
 		if (cantidadCeldas.equals(celdasGranel)) {
 			indiceInicioCeldaPrecio = celdasGranel - 4;
 			title = row.getCell(2).toString();
-			cantidad = row.getCell(3).toString();
-			cantidadMinima = row.getCell(4).toString();
 			brand = row.getCell(6).toString();
 			unit = row.getCell(7).toString();
 		}
@@ -52,7 +49,6 @@ public class VillaresExcelService extends ProductSearcherExcel {
 		if (cantidadCeldas.equals(celdasGourmetFraccionado)) {
 			indiceInicioCeldaPrecio = celdasGourmetFraccionado - 4;
 			title = row.getCell(2).toString();
-			cantidad = row.getCell(3).toString();
 			brand = row.getCell(5).toString();
 			unit = row.getCell(6).toString();
 		}
@@ -60,7 +56,6 @@ public class VillaresExcelService extends ProductSearcherExcel {
 		if (cantidadCeldas.equals(celdasDistribuido)) {
 			indiceInicioCeldaPrecio = celdasDistribuido - 4;
 			title = row.getCell(2).toString();
-			cantidad = row.getCell(3).toString();
 			unit = row.getCell(4).toString();
 			brand = row.getCell(5).toString();
 		}

@@ -2,7 +2,6 @@ package distribuidora.scrapping.services.pdf;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
