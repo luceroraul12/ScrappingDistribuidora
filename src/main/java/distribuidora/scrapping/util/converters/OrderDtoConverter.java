@@ -8,7 +8,7 @@ import distribuidora.scrapping.dto.OrderDto;
 import distribuidora.scrapping.entities.customer.Order;
 
 @Component
-public class OrderConverter extends Converter<Order, OrderDto> {
+public class OrderDtoConverter extends Converter<Order, OrderDto> {
 
 	@Autowired
 	ProductOrderDtoConverter productOrderDtoConverter;

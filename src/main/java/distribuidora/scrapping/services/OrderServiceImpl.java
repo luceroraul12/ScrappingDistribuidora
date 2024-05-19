@@ -23,7 +23,7 @@ import distribuidora.scrapping.repositories.postgres.CategoryHasUnitRepository;
 import distribuidora.scrapping.services.internal.InventorySystem;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
 import distribuidora.scrapping.util.CalculatorUtil;
-import distribuidora.scrapping.util.converters.OrderConverter;
+import distribuidora.scrapping.util.converters.OrderDtoConverter;
 import distribuidora.scrapping.util.converters.ProductOrderDtoConverter;
 
 @Service
@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 	private OrderHasProductRepository orderHasProductRepository;
 
 	@Autowired
-	private OrderConverter orderConverter;
+	private OrderDtoConverter orderConverter;
 
 	@Autowired
 	private ProductoInternoStatusService productoInternoStatusService;
