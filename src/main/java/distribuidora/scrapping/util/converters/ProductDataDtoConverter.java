@@ -9,11 +9,13 @@ import distribuidora.scrapping.entities.ProductoInternoStatus;
 import distribuidora.scrapping.util.CalculatorUtil;
 
 @Component
-public class ProductCustomerDtoConverter extends Converter<ProductoInternoStatus, ProductDataDto>{
-	
+public class ProductDataDtoConverter
+		extends
+			Converter<ProductoInternoStatus, ProductDataDto> {
+
 	@Autowired
 	CalculatorUtil calculatorUtil;
-	
+
 	@Autowired
 	LookupValueDtoConverter lookupValueDtoConverter;
 

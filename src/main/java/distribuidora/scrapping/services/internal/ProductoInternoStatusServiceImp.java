@@ -17,7 +17,7 @@ import distribuidora.scrapping.repositories.postgres.CategoryHasUnitRepository;
 import distribuidora.scrapping.repositories.postgres.ProductoInternoStatusRepository;
 import distribuidora.scrapping.services.UsuarioService;
 import distribuidora.scrapping.util.converters.LookupValueDtoConverter;
-import distribuidora.scrapping.util.converters.ProductCustomerDtoConverter;
+import distribuidora.scrapping.util.converters.ProductDataDtoConverter;
 import distribuidora.scrapping.util.converters.ProductoInternoStatusConverter;
 
 @Service
@@ -35,7 +35,7 @@ public class ProductoInternoStatusServiceImp
 	ProductoInternoStatusConverter converter;
 
 	@Autowired
-	ProductCustomerDtoConverter productCustomerDtoConverter;
+	ProductDataDtoConverter productCustomerDtoConverter;
 
 	@Autowired
 	LookupValueDtoConverter lookupValueDtoConverter;

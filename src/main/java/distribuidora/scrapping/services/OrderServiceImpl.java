@@ -24,7 +24,7 @@ import distribuidora.scrapping.services.internal.InventorySystem;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
 import distribuidora.scrapping.util.CalculatorUtil;
 import distribuidora.scrapping.util.converters.OrderConverter;
-import distribuidora.scrapping.util.converters.ProductHasStatusToProductOrderConverter;
+import distribuidora.scrapping.util.converters.ProductOrderDtoConverter;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -45,8 +45,6 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public OrderDto createOrGetActualOrder() throws Exception {
-		// Busco la tienda cliente
-		// Busco el usuario
 		// TODO: En proximas versiones hay que ver si es necesario diferenciar
 		// el pedido en funcion del usuario logeado en la tienda
 		Client client = userService.getCurrentClient();
@@ -65,8 +63,8 @@ public class OrderServiceImpl implements OrderService {
 		// Me fijo si tiene productos cargados
 		OrderDto dto = orderConverter.toDto(order);
 		// Le agrego las unidades / precio a los productos que faltaban
-		if (CollectionUtils.isNotEmpty(dto.getProducts()))
-			productoInternoStatusService.setDataToClientList(dto.getProducts());
+//		if (CollectionUtils.isNotEmpty(dto.getProducts()))
+//			productoInternoStatusService.setDataToClientList(dto.getProducts());
 
 		return dto;
 	}
