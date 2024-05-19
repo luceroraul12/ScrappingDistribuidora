@@ -9,9 +9,8 @@ public class ProductDataDto {
 	private Boolean onlyUnit;
 	private String name;
 	private String description;
-	private Integer price;
+	private Integer priceList;
 	private Integer priceUnit;
 	private LookupValueDto category;
 	private LookupValueDto unitType;
-	private double amount;
 }

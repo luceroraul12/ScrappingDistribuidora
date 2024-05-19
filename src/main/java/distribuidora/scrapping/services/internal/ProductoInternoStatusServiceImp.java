@@ -145,7 +145,7 @@ public class ProductoInternoStatusServiceImp
 			if (unit != null) {
 				dto.setUnitType(lookupValueDtoConverter.toDto(unit));
 				Double percent = Double.parseDouble(unit.getValor());
-				double result = dto.getPrice() * percent;
+				double result = dto.getPriceList() * percent;
 				dto.setPriceUnit((int) Math.round(result));
 			}
 		});

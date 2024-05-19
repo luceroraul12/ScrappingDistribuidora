@@ -7,7 +7,7 @@ import distribuidora.scrapping.entities.ProductoInterno;
 @Component
 public class CalculatorUtil {
 	
-	public Integer calculateCustomerPrice(ProductoInterno p) {
+	public Integer calculatePriceList(ProductoInterno p) {
 		int result;
 		double precio = p.getPrecio() != null ? p.getPrecio() : 0;
 		double transporte = p.getPrecioTransporte() != null
