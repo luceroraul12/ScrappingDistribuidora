@@ -10,12 +10,9 @@ import org.springframework.stereotype.Service;
 
 import distribuidora.scrapping.configs.Constantes;
 import distribuidora.scrapping.entities.ExternalProduct;
-import distribuidora.scrapping.entities.productos.especificos.DonGasparEntidad;
 
 @Service
-public class DonGasparWebScrappingServicio
-		extends
-			ProductSearcherWeb {
+public class DonGasparWebScrappingServicio extends ProductSearcherWeb {
 
 	@Override
 	protected boolean esDocumentValido(Document document) {

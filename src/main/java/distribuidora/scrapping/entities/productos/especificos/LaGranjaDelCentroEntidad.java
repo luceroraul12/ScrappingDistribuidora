@@ -2,9 +2,11 @@ package distribuidora.scrapping.entities.productos.especificos;
 
 import distribuidora.scrapping.entities.ProductoEspecifico;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class LaGranjaDelCentroEntidad extends ProductoEspecifico {
 	private final String nombreProducto;
 	private final Double precio;

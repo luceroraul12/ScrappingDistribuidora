@@ -329,7 +329,6 @@ public class PdfServiceImpl implements PdfService {
 	 */
 	private String generatePriceWithUnitLogic(
 			ProductoInternoStatus productoInternoStatus, LookupValor lvUnit) {
-		DecimalFormat df = new DecimalFormat("#.00");
 		double basePrice = generateBasePrice(
 				productoInternoStatus.getProductoInterno());
 		double result;

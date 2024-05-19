@@ -34,7 +34,6 @@ public class VillaresExcelService extends ProductSearcherExcel {
 				.valueOf(Math.round(row.getCell(1).getNumericCellValue()) + "R-"
 						+ row.getRowNum());
 		String cantidad = "";
-		String cantidadMinima = "";
 		String title = "";
 		String brand = "";
 		String unit = "";

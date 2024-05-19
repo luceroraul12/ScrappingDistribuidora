@@ -17,17 +17,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "roles")
 public class RolEntity implements GrantedAuthority {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-    @Column(name = "codigo", nullable = false)
-    private String codigo;
-    @Column(name = "descripcion", nullable = false)
-    private String descripcion;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Integer id;
+	@Column(name = "codigo", nullable = false)
+	private String codigo;
+	@Column(name = "descripcion", nullable = false)
+	private String descripcion;
 
-    @Override
-    public String getAuthority() {
-        return codigo;
-    }
+	@Override
+	public String getAuthority() {
+		return codigo;
+	}
 }

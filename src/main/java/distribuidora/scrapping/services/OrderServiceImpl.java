@@ -13,7 +13,6 @@ import distribuidora.scrapping.configs.Constantes;
 import distribuidora.scrapping.dto.OrderDto;
 import distribuidora.scrapping.entities.Client;
 import distribuidora.scrapping.entities.ProductoInternoStatus;
-import distribuidora.scrapping.entities.customer.Customer;
 import distribuidora.scrapping.entities.customer.Order;
 import distribuidora.scrapping.entities.customer.OrderHasProduct;
 import distribuidora.scrapping.repositories.ClientHasUsersRepository;
@@ -21,7 +20,6 @@ import distribuidora.scrapping.repositories.CustomerRepository;
 import distribuidora.scrapping.repositories.OrderHasProductRepository;
 import distribuidora.scrapping.repositories.OrderRepository;
 import distribuidora.scrapping.repositories.postgres.CategoryHasUnitRepository;
-import distribuidora.scrapping.security.entity.UsuarioEntity;
 import distribuidora.scrapping.services.internal.InventorySystem;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
 import distribuidora.scrapping.util.CalculatorUtil;
@@ -30,18 +28,6 @@ import distribuidora.scrapping.util.converters.ProductHasStatusToProductOrderCon
 
 @Service
 public class OrderServiceImpl implements OrderService {
-	@Autowired
-	private CustomerRepository customerRepository;
-
-	@Autowired
-	private ClientDataService clientDataService;
-
-	@Autowired
-	private InventorySystem inventorySystem;
-
-	// @Autowired
-	// private OrderHasProductConverter orderHasProductConverter;
-
 	@Autowired
 	private OrderRepository orderRepository;
 
@@ -53,18 +39,6 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ProductoInternoStatusService productoInternoStatusService;
-
-	@Autowired
-	private ProductHasStatusToProductOrderConverter productHasStatusToProductOrderConverter;
-
-	@Autowired
-	private CategoryHasUnitRepository categoryHasUnitRepository;
-
-	@Autowired
-	private CalculatorUtil calculatorUtil;
-
-	@Autowired
-	private ClientHasUsersRepository clientHasUsersRepository;
 
 	@Autowired
 	private UsuarioService userService;
@@ -97,31 +71,6 @@ public class OrderServiceImpl implements OrderService {
 		return dto;
 	}
 
-	private Client validateClient(OrderDto order) throws Exception {
-		// Verifico si el usuario ya existe
-		UsuarioEntity user = userService.getCurrentUser();
-		Client client = clientHasUsersRepository.findByClientId(user.getId())
-				.getClient();
-
-		// En caso de que no exista lo voy a registrar
-		if (client == null)
-			throw new Exception("No existe la tienda solicitada");
-		return client;
-	}
-
-	private Customer validateCustomer(OrderDto order) {
-		// Verifico si el usuario ya existe
-		Customer customer = customerRepository
-				.findByUsername(order.getUsername());
-		// En caso de que no exista lo voy a registrar
-		if (customer == null) {
-			customer = new Customer();
-			customer.setUsername(order.getUsername());
-			customer = customerRepository.save(customer);
-		}
-		return customer;
-	}
-
 	@Override
 	public List<OrderDto> getMyOrders(String storeCode, String username) {
 		List<OrderHasProduct> relations = orderHasProductRepository
@@ -131,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
 				(a, b) -> b.getDate().compareTo(a.getDate()));
 		treeProductByOrder.putAll(relations.stream()
 				.collect(Collectors.groupingBy(r -> r.getOrder())));
-		List<OrderDto> result = new ArrayList();
+		List<OrderDto> result = new ArrayList<OrderDto>();
 		if (!treeProductByOrder.isEmpty()) {
 			treeProductByOrder.forEach((o, p) -> {
 				OrderDto dto = new OrderDto();
@@ -190,9 +139,6 @@ public class OrderServiceImpl implements OrderService {
 		order = orderRepository.save(order);
 		// Busco los productos para poder mostrarlos
 		OrderDto orderDto = orderConverter.toDto(order);
-		List<OrderHasProduct> ohp = orderHasProductRepository
-				.findAllByOrderId(orderId);
-		// orderDto.setProducts(orderHasProductConverter.toDtoList(ohp));
 		return orderDto;
 	}
 

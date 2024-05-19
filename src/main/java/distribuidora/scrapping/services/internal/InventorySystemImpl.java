@@ -22,7 +22,6 @@ import distribuidora.scrapping.repositories.postgres.ExternalProductRepository;
 import distribuidora.scrapping.repositories.postgres.ProductoInternoRepository;
 import distribuidora.scrapping.services.ExternalProductService;
 import distribuidora.scrapping.services.UsuarioService;
-import distribuidora.scrapping.services.general.LookupService;
 import distribuidora.scrapping.util.converters.CategoryHasUnitDtoConverter;
 import distribuidora.scrapping.util.converters.DatosDistribuidoraConverter;
 import distribuidora.scrapping.util.converters.ProductoInternoConverter;
@@ -43,13 +42,7 @@ public class InventorySystemImpl implements InventorySystem {
 	private ProductoInternoConverter productoInternoConverter;
 
 	@Autowired
-	private ExternalProductService productoServicio;
-
-	@Autowired
 	private CategoryHasUnitDtoConverter categoryHasUnitDtoConverter;
-
-	@Autowired
-	private LookupService lookupService;
 
 	@Autowired
 	private DatosDistribuidoraRepository datosDistribuidoraRepository;
@@ -59,7 +52,7 @@ public class InventorySystemImpl implements InventorySystem {
 
 	@Autowired
 	private DatosDistribuidoraConverter datosDistribuidorConverter;
-	
+
 	@Autowired
 	private ProductoInternoStatusService productService;
 
@@ -69,8 +62,6 @@ public class InventorySystemImpl implements InventorySystem {
 		// internos
 		List<ProductoInterno> productoInternos = productoInternoRepository
 				.getProductosReferenciados();
-		Date now = new Date();
-
 		// Recorro cada producto y le agrego el precio external si corresponde
 		DecimalFormat df = new DecimalFormat("#.00");
 		for (ProductoInterno p : productoInternos) {
@@ -248,8 +239,8 @@ public class InventorySystemImpl implements InventorySystem {
 	public ProductoInternoDto getProductById(Integer productId)
 			throws Exception {
 		Client client = usuarioService.getCurrentClient();
-		return productoInternoConverter.toDto(
-				productoInternoRepository.findByIdAndClientId(productId, client.getId()));
+		return productoInternoConverter.toDto(productoInternoRepository
+				.findByIdAndClientId(productId, client.getId()));
 	}
 
 	@Override

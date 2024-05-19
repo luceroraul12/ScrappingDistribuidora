@@ -49,7 +49,7 @@ public class ExternalProductService {
 		// Hago la validacion de productos existentes
 		List<ExternalProduct> productExisted = getByDistribuidoraCodeAndProductCode(
 				data.getDistribuidora().getCodigo(), null);
-		List<ExternalProduct> productToUpdate = new ArrayList();
+		List<ExternalProduct> productToUpdate = new ArrayList<ExternalProduct>();
 		List<ExternalProduct> productToNew = new ArrayList<>();
 		for (ExternalProduct p : productos) {
 			// Actualizo el lookup a cada producto
