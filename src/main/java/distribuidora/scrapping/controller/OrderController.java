@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import distribuidora.scrapping.dto.OrderDto;
+import distribuidora.scrapping.dto.ProductDataDto;
 import distribuidora.scrapping.services.OrderService;
 
 @RestController
@@ -21,6 +22,12 @@ public class OrderController {
 	@GetMapping("")
 	OrderDto createOrGetActualOrder() throws Exception {
 		return orderService.createOrGetActualOrder();
+	}
+	
+	@GetMapping("{productId}")
+	ProductDataDto getProductDataById(@PathVariable("productId") Integer productId)
+			throws Exception {
+		return orderService.getProductDataById(productId);
 	}
 
 	@PostMapping("finalize/{orderId}")

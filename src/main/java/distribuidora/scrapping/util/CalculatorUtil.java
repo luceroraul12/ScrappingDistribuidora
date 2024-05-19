@@ -6,7 +6,7 @@ import distribuidora.scrapping.entities.ProductoInterno;
 
 @Component
 public class CalculatorUtil {
-	
+
 	public Integer calculatePriceList(ProductoInterno p) {
 		int result;
 		double precio = p.getPrecio() != null ? p.getPrecio() : 0;
@@ -22,10 +22,12 @@ public class CalculatorUtil {
 		double impuesto = (100 + (p.getPorcentajeImpuesto() != null
 				? p.getPorcentajeImpuesto()
 				: 0)) / 100;
-		double regulador = p.getRegulador() != null && p.getRegulador() != 0.0 ? p.getRegulador() : 1;
+		double regulador = p.getRegulador() != null && p.getRegulador() != 0.0
+				? p.getRegulador()
+				: 1;
 		double precioPorcentual = (precio * ganancia * impuesto) / regulador;
 		result = (int) (precioPorcentual + transporte + empaquetado + ganancia);
 		return result;
 	}
-	
+
 }

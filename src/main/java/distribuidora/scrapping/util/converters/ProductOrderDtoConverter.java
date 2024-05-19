@@ -1,5 +1,6 @@
 package distribuidora.scrapping.util.converters;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import distribuidora.scrapping.dto.ProductOrderDto;
@@ -10,6 +11,8 @@ public class ProductOrderDtoConverter
 		extends
 			Converter<OrderHasProduct, ProductOrderDto> {
 	
+	@Autowired
+	ProductDataDtoConverter productDataDtoConverter;
 
 
 	@Override
@@ -17,7 +20,7 @@ public class ProductOrderDtoConverter
 		ProductOrderDto dto = new ProductOrderDto();
 		dto.setId(entidad.getId());
 		dto.setAmount(entidad.getAmount());
-		dto.setData(null);
+		dto.setData(productDataDtoConverter.toDto(entidad.getProduct().getProdInternoStatus()));
 		return dto;
 	}
 

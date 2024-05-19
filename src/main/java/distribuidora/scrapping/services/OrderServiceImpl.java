@@ -5,26 +5,20 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import distribuidora.scrapping.configs.Constantes;
 import distribuidora.scrapping.dto.OrderDto;
+import distribuidora.scrapping.dto.ProductDataDto;
 import distribuidora.scrapping.entities.Client;
 import distribuidora.scrapping.entities.ProductoInternoStatus;
 import distribuidora.scrapping.entities.customer.Order;
 import distribuidora.scrapping.entities.customer.OrderHasProduct;
-import distribuidora.scrapping.repositories.ClientHasUsersRepository;
-import distribuidora.scrapping.repositories.CustomerRepository;
 import distribuidora.scrapping.repositories.OrderHasProductRepository;
 import distribuidora.scrapping.repositories.OrderRepository;
-import distribuidora.scrapping.repositories.postgres.CategoryHasUnitRepository;
-import distribuidora.scrapping.services.internal.InventorySystem;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
-import distribuidora.scrapping.util.CalculatorUtil;
 import distribuidora.scrapping.util.converters.OrderDtoConverter;
-import distribuidora.scrapping.util.converters.ProductOrderDtoConverter;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -42,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private UsuarioService userService;
+
+	@Autowired
+	private ProductoInternoStatusService productService;
 
 	@Override
 	public OrderDto createOrGetActualOrder() throws Exception {
@@ -63,8 +60,8 @@ public class OrderServiceImpl implements OrderService {
 		// Me fijo si tiene productos cargados
 		OrderDto dto = orderConverter.toDto(order);
 		// Le agrego las unidades / precio a los productos que faltaban
-//		if (CollectionUtils.isNotEmpty(dto.getProducts()))
-//			productoInternoStatusService.setDataToClientList(dto.getProducts());
+		// if (CollectionUtils.isNotEmpty(dto.getProducts()))
+		// productoInternoStatusService.setDataToClientList(dto.getProducts());
 
 		return dto;
 	}
@@ -150,6 +147,11 @@ public class OrderServiceImpl implements OrderService {
 		if (order.getStatus().equals(Constantes.ORDER_STATUS_INACTIVE))
 			throw new Exception("El pedido ya se encuentra eliminado");
 		return order;
+	}
+
+	@Override
+	public ProductDataDto getProductDataById(Integer productId) {
+		return productService.getProductToOrderById(productId);
 	}
 
 }

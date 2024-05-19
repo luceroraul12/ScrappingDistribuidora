@@ -3,6 +3,7 @@ package distribuidora.scrapping.services;
 import java.util.List;
 
 import distribuidora.scrapping.dto.OrderDto;
+import distribuidora.scrapping.dto.ProductDataDto;
 
 public interface OrderService {
 
@@ -36,5 +37,7 @@ public interface OrderService {
 	OrderDto finalizeOrder(Integer orderId) throws Exception;
 
 	OrderDto deleteOrder(Integer orderId) throws Exception;
+
+	ProductDataDto getProductDataById(Integer productId);
 
 }

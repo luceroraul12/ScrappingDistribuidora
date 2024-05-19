@@ -34,8 +34,6 @@ public interface InventorySystem {
 	
 	ProductoInternoDto getProductById(Integer productId) throws Exception;
 	
-	ProductDataDto getProductToOrderById(Integer productId) throws Exception;
-
 	List<ProductoInternoDto> updateManyProducto(List<ProductoInternoDto> dtos)
 			throws Exception;
 

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.itextpdf.text.DocumentException;
 
 import distribuidora.scrapping.dto.CategoryHasUnitDto;
-import distribuidora.scrapping.dto.ProductDataDto;
 import distribuidora.scrapping.dto.ProductoInternoDto;
 import distribuidora.scrapping.dto.ProductoInternoStatusDto;
 import distribuidora.scrapping.repositories.postgres.ProductoInternoRepository;
@@ -69,15 +68,9 @@ public class InventorySystemController {
 	}
 
 	@GetMapping("{productId}")
-	ProductoInternoDto getProductById(@PathVariable("productId") Integer productId)
-			throws Exception {
+	ProductoInternoDto getProductById(
+			@PathVariable("productId") Integer productId) throws Exception {
 		return service.getProductById(productId);
-	}
-	
-	@GetMapping("/toOrder/{productId}")
-	ProductDataDto getProductToOrderById(@PathVariable("productId") Integer productId)
-			throws Exception {
-		return service.getProductToOrderById(productId);
 	}
 
 	@DeleteMapping(value = "delete")
