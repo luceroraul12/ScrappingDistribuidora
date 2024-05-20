@@ -2,7 +2,7 @@ version: "3.8"
 services:
 #  buscador-ui: es el proyecto de Angular
   buscador-ui:
-    image: front-parcial:1.33t
+    image: front-parcial:1.34-dev
     ports:
       - 4200:80
     networks:
@@ -42,7 +42,7 @@ services:
       - backup_db:/backup
 #  buscador-api: es el proyecto Java Spring Boot
   buscador-api:
-    image: back-parcial:1.33t
+    image: back-parcial:1.34
     ports:
       - 8080:8080
     volumes:

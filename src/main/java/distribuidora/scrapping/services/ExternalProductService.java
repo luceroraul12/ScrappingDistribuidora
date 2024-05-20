@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,15 +76,13 @@ public class ExternalProductService {
 	}
 
 	public Set<ExternalProductDto> getBySearch(String search) {
-		List<String> values = Stream.of(search.split(" ")).toList();
+		search = "%" + search + "%";
 		Set<ExternalProductDto> result = new HashSet<>();
-		for (String v : values) {
-			List<ExternalProductDto> innerResult = externalProductDtoConverter
-					.toDtoList(this.productoRepository
-							.findBySearch(v.toUpperCase()));
-			if (CollectionUtils.isNotEmpty(innerResult))
-				result.addAll(innerResult);
-		}
+
+		List<ExternalProductDto> innerResult = externalProductDtoConverter
+				.toDtoList(this.productoRepository
+						.findBySearch(search.toUpperCase()));
+		result.addAll(innerResult);
 		return result;
 	}
 

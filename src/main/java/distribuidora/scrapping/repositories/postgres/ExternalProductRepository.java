@@ -21,7 +21,7 @@ public interface ExternalProductRepository extends JpaRepository<ExternalProduct
 	
 	@Query("SELECT ep "
 			+ "FROM ExternalProduct ep "
-			+ "WHERE ep.title LIKE CONCAT('%', :search, '%') ")
+			+ "WHERE UPPER(ep.title) LIKE UPPER(:search) ")
 	List<ExternalProduct> findBySearch(@Param("search") String search);
 
 	@Query("SELECT COUNT(ep) "
