@@ -5,19 +5,23 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import distribuidora.scrapping.configs.Constantes;
 import distribuidora.scrapping.dto.OrderDto;
 import distribuidora.scrapping.dto.ProductDataDto;
+import distribuidora.scrapping.entities.CategoryHasUnit;
 import distribuidora.scrapping.entities.Client;
 import distribuidora.scrapping.entities.ProductoInternoStatus;
 import distribuidora.scrapping.entities.customer.Order;
 import distribuidora.scrapping.entities.customer.OrderHasProduct;
 import distribuidora.scrapping.repositories.OrderHasProductRepository;
 import distribuidora.scrapping.repositories.OrderRepository;
+import distribuidora.scrapping.repositories.postgres.CategoryHasUnitRepository;
 import distribuidora.scrapping.services.internal.ProductoInternoStatusService;
+import distribuidora.scrapping.util.converters.LookupValueDtoConverter;
 import distribuidora.scrapping.util.converters.OrderDtoConverter;
 
 @Service
@@ -39,6 +43,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ProductoInternoStatusService productService;
+
+	@Autowired
+	private CategoryHasUnitRepository categoryHasUnitRepository;
+
+	@Autowired
+	private LookupValueDtoConverter lookupValueDtoConverter;
 
 	@Override
 	public OrderDto createOrGetActualOrder() throws Exception {
@@ -62,7 +72,21 @@ public class OrderServiceImpl implements OrderService {
 		// Le agrego las unidades / precio a los productos que faltaban
 		// if (CollectionUtils.isNotEmpty(dto.getProducts()))
 		// productoInternoStatusService.setDataToClientList(dto.getProducts());
-
+		if (CollectionUtils.isNotEmpty(dto.getProducts())) {
+			List<Integer> categories = dto.getProducts().stream()
+					.map(p -> p.getData().getCategory().getId()).toList();
+			List<CategoryHasUnit> categoryUnits = categoryHasUnitRepository
+					.findAllById(categories);
+			dto.getProducts().forEach(p -> {
+				CategoryHasUnit cat = categoryUnits.stream()
+						.filter(r -> r.getCategory().getId()
+								.equals(p.getData().getCategory().getId()))
+						.findFirst().orElse(null);
+				p.getData().setUnitType(
+						lookupValueDtoConverter.toDto(cat.getUnit()));
+			});
+			System.out.println("funciona");
+		}
 		return dto;
 	}
 
