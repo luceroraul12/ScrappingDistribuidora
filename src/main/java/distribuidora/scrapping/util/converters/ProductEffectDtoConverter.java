@@ -18,7 +18,8 @@ public class ProductEffectDtoConverter extends Converter<ProductEffect, ProductE
 		dto.setId(entidad.getId());
 		dto.setDescription(entidad.getDescription());
 		dto.setProductId(entidad.getProduct().getId());
-		dto.setProductName(entidad.getProduct().getDescripcion());
+		dto.setProductName(entidad.getProduct().getNombre());
+		dto.setProductDescription(entidad.getProduct().getDescripcion());
 		dto.setType(lookupValueDtoConverter.toDto(entidad.getLvType()));
 		return dto;
 	}

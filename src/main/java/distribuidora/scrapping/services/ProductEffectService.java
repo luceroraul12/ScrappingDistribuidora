@@ -15,6 +15,11 @@ public interface ProductEffectService {
 
 	LabelDto createUpdateLabel(LabelDto dto) throws Exception;
 
-	ProductEffectDto createUpdateProductEffect(ProductEffectDto dto) throws Exception;
+	ProductEffectDto createUpdateProductEffect(ProductEffectDto dto)
+			throws Exception;
+	Integer deleteProductEffectById(Integer id);
+
+	Integer deleteLabelById(Integer id);
+
 
 }

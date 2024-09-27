@@ -114,4 +114,18 @@ public class ProductEffectServiceImpl implements ProductEffectService {
 		return productEffectConverter.toDto(productEffect);
 	}
 
+	@Override
+	public Integer deleteLabelById(Integer id) {
+		labelRepository.deleteById(id);
+		return id;
+	}
+
+	@Override
+	public Integer deleteProductEffectById(Integer id) {
+		productEffectRepository.deleteById(id);
+		return id;
+	}
+	
+	
+
 }

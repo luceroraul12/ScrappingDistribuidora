@@ -9,5 +9,6 @@ public class ProductEffectDto {
 	private LabelDto label;
 	private Integer productId;
 	private String productName;
+	private String productDescription;
 	private String description;
 }
