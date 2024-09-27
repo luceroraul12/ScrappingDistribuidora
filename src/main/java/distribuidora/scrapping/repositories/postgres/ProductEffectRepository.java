@@ -14,17 +14,10 @@ public interface ProductEffectRepository
 			JpaRepository<ProductEffect, Integer> {
 
 	@Query("""
-			SELECT pe.product.id
+			SELECT pe
 			FROM ProductEffect pe
 			WHERE pe.label.id IN :labelIds
 			""")
-	List<Integer> findProductIdsByLabelIds(List<Integer> labelIds);
-
-	@Query("""
-			SELECT pe
-			FROM ProductEffect pe
-			WHERE pe.product.id IN :productIds
-			""")
-	List<ProductEffect> findProductEffectByProductIds(List<Integer> productIds);
+	List<ProductEffect> findProductEffectByLabelIds(List<Integer> labelIds);
 
 }

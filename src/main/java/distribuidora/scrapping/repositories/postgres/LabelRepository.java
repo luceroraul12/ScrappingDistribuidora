@@ -17,5 +17,13 @@ public interface LabelRepository extends JpaRepository<Label, Integer> {
 			WHERE l.client.id = :clientId
 			""")
 	List<Label> findLabelsByClientId(Integer clientId);
+	
+	@Query("""
+			SELECT l
+			FROM Label l
+			WHERE l.client.id = :clientId
+				AND l.name = :name
+			""")
+	Label findByNameAndClientId(String name, Integer clientId);
 
 }
