@@ -11,6 +11,9 @@ public class ProductEffectDtoConverter extends Converter<ProductEffect, ProductE
 	
 	@Autowired
 	LookupValueDtoConverter lookupValueDtoConverter;
+	
+	@Autowired
+	LabelDtoConverter labelDtoConverter;
 
 	@Override
 	public ProductEffectDto toDto(ProductEffect entidad) {
@@ -21,6 +24,7 @@ public class ProductEffectDtoConverter extends Converter<ProductEffect, ProductE
 		dto.setProductName(entidad.getProduct().getNombre());
 		dto.setProductDescription(entidad.getProduct().getDescripcion());
 		dto.setType(lookupValueDtoConverter.toDto(entidad.getLvType()));
+		dto.setLabel(labelDtoConverter.toDto(entidad.getLabel()));
 		return dto;
 	}
 
