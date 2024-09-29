@@ -25,7 +25,7 @@ public class ProductEffectController {
 
 	@GetMapping
 	List<ProductEffectDto> getProductEffectsByLabelIds(
-			@RequestBody ProductEffectParams params) {
+			@RequestBody(required = false) ProductEffectParams params) {
 		return productEffectService.getProductEffectsByParams(params);
 	}
 	

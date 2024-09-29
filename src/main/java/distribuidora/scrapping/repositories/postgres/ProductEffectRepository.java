@@ -16,8 +16,11 @@ public interface ProductEffectRepository
 	@Query("""
 			SELECT pe
 			FROM ProductEffect pe
-			WHERE pe.label.id IN :labelIds
+				INNER JOIN pe.label l
+				INNER JOIN l.client c
+			WHERE (:labelIds IS NULL OR l.id IN :labelIds)
+				AND c.id = :clientId
 			""")
-	List<ProductEffect> findProductEffectByLabelIds(List<Integer> labelIds);
+	List<ProductEffect> findProductEffectByLabelIds(Integer clientId, List<Integer> labelIds);
 
 }

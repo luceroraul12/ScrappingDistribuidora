@@ -55,8 +55,10 @@ public class ProductEffectServiceImpl implements ProductEffectService {
 	@Override
 	public List<ProductEffectDto> getProductEffectsByParams(
 			ProductEffectParams params) {
+		List<Integer> labelIds = params != null ? params.getLabelIds() : null;
+		Client client = userService.getCurrentClient();
 		List<ProductEffect> result = productEffectRepository
-				.findProductEffectByLabelIds(params.getLabelIds());
+				.findProductEffectByLabelIds(client.getId(), labelIds);
 		return productEffectConverter.toDtoList(result);
 	}
 
@@ -103,7 +105,7 @@ public class ProductEffectServiceImpl implements ProductEffectService {
 			productEffect.setLvType(lookupService
 					.getLookupValueByCode(dto.getType().getCode()));
 			ProductoInterno product = inventorySystem
-					.getProductByIds(Arrays.asList(dto.getProductId())).stream()
+					.getProductByIds(Arrays.asList(dto.getProduct().getId())).stream()
 					.findFirst().orElse(null);
 			productEffect.setProduct(product);
 		}
